@@ -10,14 +10,14 @@ export class BookmarkService {
     const page = paginationDto?.page || 1;
     const limit = paginationDto?.limit || 10;
     const [bookmarks, total] = await Promise.all([
-      this.prisma.bookmark.findMany({
+      this.prisma.bookmarks.findMany({
         where: {
           userId,
         },
         skip: (page - 1) * limit,
         take: limit,
       }),
-      this.prisma.bookmark.count(),
+      this.prisma.bookmarks.count(),
     ]);
     return {
       data: bookmarks,
@@ -29,10 +29,10 @@ export class BookmarkService {
   }
 
   //retrieve single bookmark
-  async findOneBookmark(userId: number, bookmarkId: number) {
-    const bookmark = await this.prisma.bookmark.findMany({
+  async findOneBookmark(userId: number, bookmarkId: string) {
+    const bookmark = await this.prisma.bookmarks.findMany({
       where: {
-        id: bookmarkId,
+        key: bookmarkId,
         userId,
       },
     });
@@ -41,7 +41,7 @@ export class BookmarkService {
 
   //create bookmark
   async createBookmark(userId: number, dto: BookmarkDto) {
-    const bookmark = await this.prisma.bookmark.create({
+    const bookmark = await this.prisma.bookmarks.create({
       data: {
         userId,
         ...dto,
@@ -52,7 +52,7 @@ export class BookmarkService {
 
   //update bookmark
   async updateBookmark(userId: number, bookmarkId: number, dto: BookmarkDto) {
-    const bookmark = await this.prisma.bookmark.findUnique({
+    const bookmark = await this.prisma.bookmarks.findUnique({
       where: {
         id: bookmarkId,
       },
@@ -62,7 +62,7 @@ export class BookmarkService {
       throw new ForbiddenException('Access to resource denied');
     }
 
-    return this.prisma.bookmark.update({
+    return this.prisma.bookmarks.update({
       where: {
         id: bookmarkId,
       },
@@ -74,7 +74,7 @@ export class BookmarkService {
 
   //delete bookmark
   async deleteBookmark(userId: number, bookmarkId: number) {
-    const bookmark = await this.prisma.bookmark.findUnique({
+    const bookmark = await this.prisma.bookmarks.findUnique({
       where: {
         id: bookmarkId,
       },
@@ -83,7 +83,7 @@ export class BookmarkService {
     if (!bookmark || bookmark.userId !== userId) {
       throw new ForbiddenException('Access to resource denied');
     }
-    return this.prisma.bookmark.delete({
+    return this.prisma.bookmarks.delete({
       where: {
         id: bookmarkId,
       },

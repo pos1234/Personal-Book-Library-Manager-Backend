@@ -24,7 +24,7 @@ export class BookmarkController {
   @Get(':id')
   findOneBookmark(
     @Param('userId', ParseIntPipe) userId: number,
-    @Param('id', ParseIntPipe) bookmarkId: number,
+    @Param('key') bookmarkId: string,
   ) {
     return this.bookmarkService.findOneBookmark(userId, bookmarkId);
   }

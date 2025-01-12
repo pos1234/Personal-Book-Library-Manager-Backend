@@ -10,6 +10,11 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+  app.enableCors({
+    origin: 'http://localhost:3000', // Frontend origin
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   // Swagger setup
   const config = new DocumentBuilder()
     .setTitle('Bookmarks API')

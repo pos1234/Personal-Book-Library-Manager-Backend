@@ -24,6 +24,16 @@ export class BookmarkDto {
   @IsString()
   @IsOptional()
   ISBN: string;
+
+  @ApiPropertyOptional({ title: 'Key of bookmarked item ', example: "/key/Wy787g" })
+  @IsString()
+  @IsNotEmpty()
+  key: string;
+
+  @ApiPropertyOptional({ title: 'Cover id of bookmarked item ', example: 23457 })
+  @IsInt()
+  @IsOptional()
+  coverId: number;
   
   @ApiPropertyOptional({ title: 'Read status of bookmarked item ', example: true })
   @IsBoolean()

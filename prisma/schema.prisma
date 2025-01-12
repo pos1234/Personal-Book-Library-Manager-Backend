@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
+model Users{
   id Int     @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -21,20 +21,22 @@ model User{
   email String @unique
   hash String
   name      String?
-  bookmarks Bookmark[]
+  bookmarks Bookmarks[]
 }
 
-model Bookmark{
+model Bookmarks{
   id Int     @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  key String @unique
   title String
   author String
   ISBN String?
+  coverId Int?
   readStatus Boolean  @default(false)
   rating Int?
   notes String?
-  user   User    @relation(fields: [userId], references: [id])
+  user   Users    @relation(fields: [userId], references: [id])
   userId Int 
 }

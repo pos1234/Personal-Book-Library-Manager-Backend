@@ -15,19 +15,19 @@ export class AuthService {
   async signup(dto: AuthDto) {
     try {
       const hash = await argon.hash(dto.password);
-      const user = await this.prisma.user.create({
+      const user = await this.prisma.users.create({
         data: {
           email: dto.email,
           hash,
         },
       });
       const token = await this.signToken(user.id, user.email);
-      const { hash: _, ...userWithoutHash } = user;
-      const userData = {
-        userWithoutHash,
+      const { hash: _, ...userData } = user;
+      const response = {
+        userData,
         token,
       };
-      return userData;
+      return response;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -40,7 +40,7 @@ export class AuthService {
     }
   }
   async signin(dto: AuthDto) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.users.findUnique({
       where: {
         email: dto.email,
       },
@@ -54,12 +54,12 @@ export class AuthService {
       throw new ForbiddenException('Incorrect Email or Password');
     }
     const token = await this.signToken(user.id, user.email);
-    const { hash: _, ...userWithoutHash } = user;
-    const userData = {
-      userWithoutHash,
+    const { hash: _, ...userData } = user;
+    const response = {
+      userData,
       token,
     };
-    return userData;
+    return response;
   }
 
   async signToken(userId: number, email: string) {
@@ -67,7 +67,6 @@ export class AuthService {
       sub: userId,
       email,
     };
-    console.log(this.config.get('JWT_SECRET'));
     const token = await this.jwt.signAsync(payload, {
       expiresIn: '15m',
       secret: this.config.get('JWT_SECRET'),

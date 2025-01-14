@@ -66,3 +66,17 @@ export class PaginationDto {
   @Min(1)
   limit?: number;
 }
+
+export class SearchBooksDto {
+  @IsOptional()
+  @IsString()
+  title?: string;
+
+  @IsOptional()
+  @IsString()
+  author?: string;
+
+  @IsOptional()
+  @IsString()
+  ISBN?: string;
+}

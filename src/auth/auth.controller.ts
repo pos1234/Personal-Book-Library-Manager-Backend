@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
-import { AuthGuard } from './strategy';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 @Controller('auth')
@@ -31,10 +30,4 @@ export class AuthoController {
   singin(@Body() dto: AuthDto) {
     return this.authService.signin(dto);
   }
-
-  // @UseGuards(AuthGuard)
-  // @Get('profile')
-  // getProfile(@Body() dto: AuthDto) {
-  //   return dto;
-  // }
 }

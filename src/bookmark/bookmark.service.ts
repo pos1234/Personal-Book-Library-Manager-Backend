@@ -1,21 +1,47 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { BookmarkDto, PaginationDto } from './dto';
+import { BookmarkDto, PaginationDto, SearchBooksDto } from './dto';
 
 @Injectable({})
 export class BookmarkService {
   constructor(private prisma: PrismaService) {}
   //retrieve bookmarks
-  async findAllBookmarks(userId: number, paginationDto: PaginationDto) {
+  async searchBookmarks(
+    userId: number,
+    paginationDto: PaginationDto,
+    searchDto: SearchBooksDto,
+  ) {
     const page = paginationDto?.page || 1;
     const limit = paginationDto?.limit || 10;
+    const { title, author, ISBN } = searchDto;
     const [bookmarks, total] = await Promise.all([
       this.prisma.bookmarks.findMany({
         where: {
           userId,
+          AND: [
+            searchDto
+              ? {
+                  OR: [
+                    { title: { contains: title, mode: 'insensitive' } },
+                    { author: { contains: author, mode: 'insensitive' } },
+                    { ISBN: { contains: ISBN, mode: 'insensitive' } },
+                  ],
+                }
+              : {},
+          ],
         },
         skip: (page - 1) * limit,
         take: limit,
+      }),
+      this.prisma.bookmarks.count({
+        where: {
+          userId,
+          OR: [
+            { title: { contains: title, mode: 'insensitive' } },
+            { author: { contains: author, mode: 'insensitive' } },
+            { ISBN: { contains: ISBN, mode: 'insensitive' } },
+          ],
+        },
       }),
       this.prisma.bookmarks.count(),
     ]);

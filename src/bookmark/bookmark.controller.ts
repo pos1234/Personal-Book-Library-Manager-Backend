@@ -8,17 +8,19 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { BookmarkDto, PaginationDto } from './dto';
+import { BookmarkDto, PaginationDto, SearchBooksDto } from './dto';
 import { BookmarkService } from './bookmark.service';
+import { AuthGuard } from 'src/bookmark/strategy';
 
+@UseGuards(AuthGuard)
 @Controller('bookmarks/user/:userId/')
 export class BookmarkController {
   constructor(private bookmarkService: BookmarkService) {}
   @Get()
-  findAllBookmarks(@Param('userId', ParseIntPipe) userId: number,@Query() paginationDto: PaginationDto) {
-    // return paginationDto
-    return this.bookmarkService.findAllBookmarks(userId,paginationDto);
+  findAllBookmarks(@Param('userId', ParseIntPipe) userId: number,@Query() paginationDto: PaginationDto,@Query() searchBooksDto: SearchBooksDto) {
+    return this.bookmarkService.searchBookmarks(userId,paginationDto,searchBooksDto);
   }
 
   @Get(':id')

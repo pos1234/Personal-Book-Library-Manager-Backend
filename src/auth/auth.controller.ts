@@ -4,7 +4,7 @@ import { AuthDto } from './dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 @Controller('auth')
-export class AuthoController {
+export class AuthController {
   constructor(private authService: AuthService) {}
 
   @ApiPropertyOptional({

@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { BookmarkDto, PaginationDto, SearchBooksDto } from './dto';
 import { BookmarkService } from './bookmark.service';
-import { AuthGuard } from 'src/bookmark/strategy';
+import { AuthGuard } from '../bookmark/strategy';
 
 @UseGuards(AuthGuard)
 @Controller('bookmarks/user/:userId/')

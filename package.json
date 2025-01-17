@@ -10,7 +10,7 @@
     "db:dev:rm":"docker compose rm book-management -s -f -v",
     "db:dev:up":"docker compose up book-management -d",
     "db:dev:restart":"yarn db:dev:rm && yarn db:dev:up && yarn prisma:dev:deploy",
-    "build": "npx prisma generate && npx prisma migrate reset && nest build",
+    "build": "npx prisma generate && npx prisma migrate dev && nest build",
     "postinstall": "npx prisma generate",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

@@ -11,7 +11,7 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
-    origin: 'http://localhost:3000', // Frontend origin
+    origin: 'https://personal-book-library-manager-frontend-i1he8ucya.vercel.app', // Frontend origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
